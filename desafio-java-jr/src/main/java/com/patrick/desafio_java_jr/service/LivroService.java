@@ -3,12 +3,12 @@ package com.patrick.desafio_java_jr.service;
 import com.patrick.desafio_java_jr.dto.LivroRequestDTO;
 import com.patrick.desafio_java_jr.dto.LivroResponseDTO;
 import com.patrick.desafio_java_jr.entity.Livro;
+import com.patrick.desafio_java_jr.exception.LivroNotFoundException;
 import com.patrick.desafio_java_jr.repository.LivroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class LivroService {
 
 	public LivroResponseDTO atualizarPorId(Long id, LivroRequestDTO requestDTO) {
 		Livro livro = livroRepository.findById(id)
-				.orElseThrow(() -> new NoSuchElementException("Livro nao encontrado com o id: " + id));
+				.orElseThrow(() -> new LivroNotFoundException(id));
 
 		livro.setTitulo(requestDTO.getTitulo());
 		livro.setAutor(requestDTO.getAutor());
@@ -47,7 +47,7 @@ public class LivroService {
 
 	public void deletarPorId(Long id) {
 		Livro livro = livroRepository.findById(id)
-				.orElseThrow(() -> new NoSuchElementException("Livro nao encontrado com o id: " + id));
+				.orElseThrow(() -> new LivroNotFoundException(id));
 
 		livroRepository.delete(livro);
 	}
